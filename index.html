@@ -13,61 +13,48 @@
 
 body {
   margin: 0;
-  padding: 16px;
-  font-family: Arial, Helvetica, sans-serif;
+  padding: 20px;
   background: #f1f5f9;
+  font-family: Arial, sans-serif;
   color: #1e293b;
 }
 
 .container {
   max-width: 480px;
-  margin: 20px auto;
+  margin: auto;
+  background: white;
   padding: 24px;
-  background: #ffffff;
   border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 20px rgba(0,0,0,.08);
 }
 
-.header {
+h1 {
   text-align: center;
-  margin-bottom: 24px;
+  font-size: 23px;
+  margin-top: 0;
+  color: #1d4ed8;
 }
 
-.header h1 {
-  font-size: 24px;
-  margin: 0 0 8px;
-}
-
-.header p {
+.subtitle {
+  text-align: center;
   color: #64748b;
-  font-size: 14px;
-  margin: 0;
+  margin-bottom: 24px;
 }
 
 label {
   display: block;
-  font-weight: 600;
+  font-weight: bold;
   margin-top: 18px;
   margin-bottom: 7px;
 }
 
-input,
-select,
-textarea {
+input, select, textarea {
   width: 100%;
   padding: 13px;
-  font-size: 16px;
   border: 1px solid #cbd5e1;
   border-radius: 9px;
-  background: #ffffff;
-  color: #1e293b;
-}
-
-input:focus,
-select:focus,
-textarea:focus {
-  outline: 2px solid #2563eb;
-  border-color: #2563eb;
+  font-size: 16px;
+  background: white;
 }
 
 textarea {
@@ -75,24 +62,25 @@ textarea {
   min-height: 90px;
 }
 
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37,99,235,.15);
+}
+
 .fsg-box {
   background: #eff6ff;
-  border: 1px solid #bfdbfe;
-  border-radius: 9px;
-  padding: 13px;
-  margin-top: 5px;
+  padding: 12px;
+  margin-top: 8px;
+  border-radius: 8px;
   color: #1d4ed8;
-  font-weight: 600;
+  font-weight: bold;
 }
 
 .help {
   font-size: 13px;
   color: #64748b;
-  margin-top: 6px;
-}
-
-.required {
-  color: #dc2626;
+  margin-top: 5px;
 }
 
 button {
@@ -102,58 +90,42 @@ button {
   background: #2563eb;
   color: white;
   border: none;
-  border-radius: 9px;
+  border-radius: 10px;
   font-size: 17px;
   font-weight: bold;
   cursor: pointer;
 }
 
-button:hover {
-  background: #1d4ed8;
-}
-
 button:disabled {
   background: #94a3b8;
-  cursor: not-allowed;
 }
 
 .message {
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 8px;
   display: none;
-  margin-top: 18px;
-  padding: 14px;
-  border-radius: 9px;
-  font-size: 14px;
-  line-height: 1.5;
+  text-align: center;
 }
 
 .success {
-  display: block;
   background: #dcfce7;
   color: #166534;
 }
 
 .error {
-  display: block;
   background: #fee2e2;
   color: #991b1b;
 }
 
-.info {
-  display: block;
-  background: #dbeafe;
-  color: #1e40af;
-}
-
-.footer {
-  text-align: center;
-  font-size: 12px;
-  color: #94a3b8;
-  margin-top: 22px;
-}
-
 .hidden {
-  display: none !important;
+  display: none;
 }
+
+.required {
+  color: #dc2626;
+}
+
 </style>
 </head>
 
@@ -161,855 +133,367 @@ button:disabled {
 
 <div class="container">
 
-  <div class="header">
+<h1>Publishers Monthly Report</h1>
 
-    <h1>Monthly Publishers Report</h1>
+<div class="subtitle">
+Monthly Field Service Report
+</div>
 
-    <p>Submit your monthly field service report</p>
+<form id="reportForm">
 
-  </div>
+<label>
+1. Publisher Name <span class="required">*</span>
+</label>
 
-  <form id="reportForm">
+<input
+  type="text"
+  id="publisherName"
+  list="publisherList"
+  placeholder="Search publisher name"
+  autocomplete="off"
+  required
+>
 
-    <!-- PUBLISHER NAME -->
+<datalist id="publisherList"></datalist>
 
-    <label for="publisher">
-      Publisher Name <span class="required">*</span>
-    </label>
+<div id="fsgBox" class="fsg-box hidden">
+FSG: <span id="fsgDisplay"></span>
+</div>
 
-    <select id="publisher" required>
+<label>
+2. Reporting Month <span class="required">*</span>
+</label>
 
-      <option value="">Loading publishers...</option>
+<input
+  type="month"
+  id="reportingMonth"
+  required
+>
 
-    </select>
+<label>
+3. Publisher Type <span class="required">*</span>
+</label>
 
-    <!-- FSG -->
+<select id="publisherType" required>
+  <option value="">Select publisher type</option>
+  <option value="Publisher">Publisher</option>
+  <option value="Regular Pioneer">Regular Pioneer</option>
+  <option value="Auxiliary Pioneer">Auxiliary Pioneer</option>
+  <option value="Other">Other</option>
+</select>
 
-    <label>Field Service Group</label>
+<label>
+4. Hours
+<span id="hoursRequired" class="required hidden">*</span>
+</label>
 
-    <div id="fsgDisplay" class="fsg-box">
+<input
+  type="number"
+  id="hours"
+  min="0"
+  step="0.5"
+  placeholder="Enter hours"
+>
 
-      Select your name first
+<div class="help" id="hoursHelp">
+Optional for publishers. Required for pioneers.
+</div>
 
-    </div>
+<label>
+5. Bible Studies
+</label>
 
-    <!-- REPORTING MONTH -->
+<input
+  type="number"
+  id="bibleStudies"
+  min="0"
+  step="1"
+  placeholder="Number of Bible studies"
+>
 
-    <label for="month">
-      Reporting Month <span class="required">*</span>
-    </label>
+<label>
+6. Remarks
+</label>
 
-    <input
-      type="month"
-      id="month"
-      required
-    >
+<textarea
+  id="remarks"
+  placeholder="Optional remarks"
+></textarea>
 
-    <!-- PUBLISHER TYPE -->
+<button type="submit" id="submitButton">
+SUBMIT REPORT
+</button>
 
-    <label for="publisherType">
-      Publisher Type <span class="required">*</span>
-    </label>
+<div id="message" class="message"></div>
 
-    <select id="publisherType" required>
-
-      <option value="">Select publisher type</option>
-
-      <option value="Publisher">
-        Publisher
-      </option>
-
-      <option value="Regular Pioneer">
-        Regular Pioneer
-      </option>
-
-      <option value="Auxiliary Pioneer">
-        Auxiliary Pioneer
-      </option>
-
-    </select>
-
-    <!-- HOURS -->
-
-    <label for="hours">
-
-      Hours
-
-      <span id="hoursRequired" class="required hidden">
-        *
-      </span>
-
-    </label>
-
-    <input
-      type="number"
-      id="hours"
-      min="0"
-      step="0.25"
-      placeholder="Enter hours"
-    >
-
-    <div id="hoursHelp" class="help">
-
-      Optional for publishers. Required for pioneers.
-
-    </div>
-
-    <!-- BIBLE STUDIES -->
-
-    <label for="studies">
-      Bible Studies
-    </label>
-
-    <input
-      type="number"
-      id="studies"
-      min="0"
-      step="1"
-      placeholder="Optional"
-    >
-
-    <!-- REMARKS -->
-
-    <label for="remarks">
-      Remarks
-    </label>
-
-    <textarea
-      id="remarks"
-      placeholder="Optional remarks"
-    ></textarea>
-
-    <!-- SUBMIT -->
-
-    <button
-      type="submit"
-      id="submitButton"
-    >
-
-      Submit Report
-
-    </button>
-
-    <!-- MESSAGE -->
-
-    <div
-      id="message"
-      class="message"
-    ></div>
-
-  </form>
-
-  <div class="footer">
-
-    Publishers Monthly Reporting System
-
-  </div>
-
+</form>
 </div>
 
 <script>
 
-// ==========================================
-// GOOGLE APPS SCRIPT URL
-// ==========================================
-
-const SCRIPT_URL =
-"https://script.google.com/macros/s/AKfycbxiuyI0MiiUR_PYyt4grh3-bTyFQOAeHA3VBBfYLTwjr_2BVlZhXtNBvF9_aFAUeq_z/exec";
-
-// ==========================================
-// ELEMENTS
-// ==========================================
-
-const publisherSelect =
-document.getElementById("publisher");
-
-const fsgDisplay =
-document.getElementById("fsgDisplay");
-
-const publisherType =
-document.getElementById("publisherType");
-
-const hoursInput =
-document.getElementById("hours");
-
-const hoursHelp =
-document.getElementById("hoursHelp");
-
-const hoursRequired =
-document.getElementById("hoursRequired");
-
-const studiesInput =
-document.getElementById("studies");
-
-const remarksInput =
-document.getElementById("remarks");
-
-const monthInput =
-document.getElementById("month");
-
-const submitButton =
-document.getElementById("submitButton");
-
-const message =
-document.getElementById("message");
-
-const form =
-document.getElementById("reportForm");
-
-// ==========================================
-// VARIABLES
-// ==========================================
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxiuyI0MiiUR_PYyt4grh3-bTyFQOAeHA3VBBfYLTwjr_2BVlZhXtNBvF9_aFAUeq_z/exec";
 
 let publishers = [];
 
-let submitting = false;
-
-// ==========================================
-// DEFAULT REPORTING MONTH
-// ==========================================
-
-function setCurrentMonth() {
-
+// Previous month default
+function setPreviousMonth() {
   const now = new Date();
 
-  const year = now.getFullYear();
+  const previousMonth = new Date(
+    now.getFullYear(),
+    now.getMonth() - 1,
+    1
+  );
 
+  const year = previousMonth.getFullYear();
   const month = String(
-    now.getMonth() + 1
+    previousMonth.getMonth() + 1
   ).padStart(2, "0");
 
-  monthInput.value =
-    year + "-" + month;
-
+  document.getElementById("reportingMonth").value =
+    `${year}-${month}`;
 }
 
-setCurrentMonth();
-
-// ==========================================
-// JSONP REQUEST
-// ==========================================
-
-function jsonp(url, callback) {
+// Load publisher list using JSONP
+function loadPublishers() {
 
   const callbackName =
-    "callback_" +
-    Date.now() +
-    "_" +
-    Math.floor(Math.random() * 1000000);
+    "publisherCallback_" + Date.now();
 
-  const script =
-    document.createElement("script");
-
-  let finished = false;
-
-  const timeout =
-    setTimeout(function() {
-
-      if (finished) return;
-
-      finished = true;
-
-      delete window[callbackName];
-
-      script.remove();
-
-      callback({
-        success: false,
-        message: "Request timed out"
-      });
-
-    }, 15000);
-
-  window[callbackName] =
-  function(data) {
-
-    if (finished) return;
-
-    finished = true;
-
-    clearTimeout(timeout);
+  window[callbackName] = function(data) {
 
     delete window[callbackName];
 
-    script.remove();
+    if (!data.success) {
+      showMessage(
+        "Unable to load publishers.",
+        false
+      );
+      return;
+    }
 
-    callback(data);
+    publishers = data.publishers || [];
 
-  };
+    const datalist =
+      document.getElementById("publisherList");
 
-  script.onerror =
-  function() {
+    datalist.innerHTML = "";
 
-    if (finished) return;
+    publishers.forEach(publisher => {
 
-    finished = true;
+      const option = document.createElement("option");
 
-    clearTimeout(timeout);
+      option.value = publisher.name;
 
-    delete window[callbackName];
+      datalist.appendChild(option);
 
-    script.remove();
-
-    callback({
-      success: false,
-      message: "Unable to connect to Google Sheets"
     });
 
   };
 
+  const script = document.createElement("script");
+
   script.src =
-    url +
-    "&callback=" +
+    SCRIPT_URL +
+    "?action=getPublishers&callback=" +
     callbackName;
 
-  document.body.appendChild(script);
-
-}
-
-// ==========================================
-// LOAD PUBLISHERS
-// ==========================================
-
-function loadPublishers() {
-
-  publisherSelect.innerHTML =
-    '<option value="">Loading publishers...</option>';
-
-  jsonp(
-    SCRIPT_URL + "?action=publishers",
-    function(data) {
-
-      if (!data || !data.success) {
-
-        publisherSelect.innerHTML =
-          '<option value="">Unable to load publishers</option>';
-
-        showMessage(
-          "Unable to load publisher list. Please refresh the page.",
-          "error"
-        );
-
-        return;
-
-      }
-
-      publishers =
-        data.publishers || [];
-
-      publisherSelect.innerHTML =
-        '<option value="">Select your name</option>';
-
-      publishers.forEach(function(publisher) {
-
-        const option =
-          document.createElement("option");
-
-        option.value =
-          publisher.name;
-
-        option.textContent =
-          publisher.name;
-
-        publisherSelect.appendChild(option);
-
-      });
-
-    }
-  );
-
-}
-
-// ==========================================
-// SELECT PUBLISHER
-// ==========================================
-
-publisherSelect.addEventListener(
-  "change",
-  function() {
-
-    const selectedPublisher =
-      publishers.find(function(publisher) {
-
-        return publisher.name ===
-          publisherSelect.value;
-
-      });
-
-    if (selectedPublisher) {
-
-      fsgDisplay.textContent =
-        selectedPublisher.fsg ||
-        "FSG not assigned";
-
-      // Automatically populate type
-      // if master database has a type
-
-      if (selectedPublisher.type) {
-
-        publisherType.value =
-          selectedPublisher.type;
-
-        updateHoursRequirement();
-
-      }
-
-    } else {
-
-      fsgDisplay.textContent =
-        "Select your name first";
-
-      publisherType.value = "";
-
-      updateHoursRequirement();
-
-    }
-
-  }
-);
-
-// ==========================================
-// HOURS REQUIREMENT
-// ==========================================
-
-function updateHoursRequirement() {
-
-  const type =
-    publisherType.value;
-
-  const isPioneer =
-    type === "Regular Pioneer" ||
-    type === "Auxiliary Pioneer";
-
-  hoursInput.required =
-    isPioneer;
-
-  hoursRequired.classList.toggle(
-    "hidden",
-    !isPioneer
-  );
-
-  hoursHelp.textContent =
-    isPioneer
-      ? "Hours are required for this publisher type."
-      : "Hours are optional for publishers.";
-
-}
-
-publisherType.addEventListener(
-  "change",
-  updateHoursRequirement
-);
-
-// ==========================================
-// MESSAGE DISPLAY
-// ==========================================
-
-function showMessage(text, type) {
-
-  message.className =
-    "message " + type;
-
-  message.textContent =
-    text;
-
-  message.style.display =
-    "block";
-
-}
-
-function hideMessage() {
-
-  message.className =
-    "message";
-
-  message.textContent =
-    "";
-
-  message.style.display =
-    "none";
-
-}
-
-// ==========================================
-// DUPLICATE CHECK
-// ==========================================
-
-function checkDuplicate(
-  publisherName,
-  month,
-  callback
-) {
-
-  const url =
-    SCRIPT_URL +
-    "?action=check" +
-    "&name=" +
-    encodeURIComponent(publisherName) +
-    "&month=" +
-    encodeURIComponent(month);
-
-  jsonp(url, callback);
-
-}
-
-// ==========================================
-// SUBMISSION
-// ==========================================
-
-form.addEventListener(
-  "submit",
-  function(event) {
-
-    event.preventDefault();
-
-    if (submitting) return;
-
-    hideMessage();
-
-    // --------------------------------------
-    // VALIDATE PUBLISHER
-    // --------------------------------------
-
-    const selectedPublisher =
-      publishers.find(function(publisher) {
-
-        return publisher.name ===
-          publisherSelect.value;
-
-      });
-
-    if (!selectedPublisher) {
-
-      showMessage(
-        "Please select your publisher name.",
-        "error"
-      );
-
-      return;
-
-    }
-
-    // --------------------------------------
-    // VALIDATE MONTH
-    // --------------------------------------
-
-    const month =
-      monthInput.value;
-
-    if (!month) {
-
-      showMessage(
-        "Please select the reporting month.",
-        "error"
-      );
-
-      return;
-
-    }
-
-    // --------------------------------------
-    // VALIDATE TYPE
-    // --------------------------------------
-
-    const type =
-      publisherType.value;
-
-    if (!type) {
-
-      showMessage(
-        "Please select your publisher type.",
-        "error"
-      );
-
-      return;
-
-    }
-
-    // --------------------------------------
-    // VALIDATE HOURS
-    // --------------------------------------
-
-    const hours =
-      hoursInput.value;
-
-    const isPioneer =
-      type === "Regular Pioneer" ||
-      type === "Auxiliary Pioneer";
-
-    if (isPioneer && hours === "") {
-
-      showMessage(
-        "Hours are required for Regular Pioneers and Auxiliary Pioneers.",
-        "error"
-      );
-
-      hoursInput.focus();
-
-      return;
-
-    }
-
-    if (
-      hours !== "" &&
-      (
-        Number(hours) < 0 ||
-        isNaN(Number(hours))
-      )
-    ) {
-
-      showMessage(
-        "Please enter valid hours.",
-        "error"
-      );
-
-      return;
-
-    }
-
-    // --------------------------------------
-    // VALIDATE BIBLE STUDIES
-    // --------------------------------------
-
-    const studies =
-      studiesInput.value;
-
-    if (
-      studies !== "" &&
-      (
-        Number(studies) < 0 ||
-        !Number.isInteger(Number(studies))
-      )
-    ) {
-
-      showMessage(
-        "Bible Studies must be a whole number.",
-        "error"
-      );
-
-      return;
-
-    }
-
-    // --------------------------------------
-    // REPORT DATA
-    // --------------------------------------
-
-    const report = {
-
-      publisherName:
-        selectedPublisher.name,
-
-      fsg:
-        selectedPublisher.fsg,
-
-      month:
-        month,
-
-      publisherType:
-        type,
-
-      hours:
-        hours === ""
-          ? ""
-          : Number(hours),
-
-      bibleStudies:
-        studies === ""
-          ? ""
-          : Number(studies),
-
-      remarks:
-        remarksInput.value.trim()
-
-    };
-
-    // --------------------------------------
-    // DISABLE SUBMIT
-    // --------------------------------------
-
-    submitting = true;
-
-    submitButton.disabled =
-      true;
-
-    submitButton.textContent =
-      "Checking report...";
-
-    // --------------------------------------
-    // CHECK DUPLICATE FIRST
-    // --------------------------------------
-
-    checkDuplicate(
-      report.publisherName,
-      report.month,
-      function(result) {
-
-        if (!result || result.success === false) {
-
-          showMessage(
-            "Unable to verify duplicate reports. Please try again.",
-            "error"
-          );
-
-          resetSubmitButton();
-
-          return;
-
-        }
-
-        if (result.exists) {
-
-          showMessage(
-            "You already submitted a report for " +
-            report.month +
-            ". Duplicate reports are not allowed.",
-            "error"
-          );
-
-          resetSubmitButton();
-
-          return;
-
-        }
-
-        // ----------------------------------
-        // SUBMIT REPORT
-        // ----------------------------------
-
-        submitButton.textContent =
-          "Submitting report...";
-
-        submitReport(report);
-
-      }
+  script.onerror = function() {
+    showMessage(
+      "Unable to connect. Please refresh the page.",
+      false
     );
+  };
+
+  document.body.appendChild(script);
+}
+
+// Display FSG when publisher is selected
+document.getElementById("publisherName")
+.addEventListener("input", function() {
+
+  const selectedName = this.value.trim();
+
+  const publisher = publishers.find(
+    p => p.name === selectedName
+  );
+
+  const fsgBox =
+    document.getElementById("fsgBox");
+
+  if (publisher) {
+
+    document.getElementById("fsgDisplay")
+      .textContent = publisher.fsg || "Not assigned";
+
+    fsgBox.classList.remove("hidden");
+
+  } else {
+
+    fsgBox.classList.add("hidden");
 
   }
-);
 
-// ==========================================
-// SUBMIT TO GOOGLE APPS SCRIPT
-// ==========================================
+});
 
-function submitReport(report) {
+// Pioneer hours validation
+document.getElementById("publisherType")
+.addEventListener("change", function() {
 
-  fetch(SCRIPT_URL, {
+  const pioneer =
+    this.value === "Regular Pioneer" ||
+    this.value === "Auxiliary Pioneer";
 
-    method: "POST",
+  const hoursInput =
+    document.getElementById("hours");
 
-    mode: "no-cors",
+  const requiredIndicator =
+    document.getElementById("hoursRequired");
 
-    headers: {
+  if (pioneer) {
 
-      "Content-Type":
-        "text/plain;charset=utf-8"
+    hoursInput.required = true;
 
-    },
+    requiredIndicator.classList.remove("hidden");
 
-    body: JSON.stringify(report)
+    document.getElementById("hoursHelp")
+      .textContent = "Hours are required for pioneers.";
 
-  })
-  .then(function() {
+  } else {
 
-    // Because no-cors cannot read Google's response,
-    // verify by checking the Responses sheet.
+    hoursInput.required = false;
 
-    submitButton.textContent =
-      "Verifying submission...";
+    requiredIndicator.classList.add("hidden");
 
-    verifySubmission(report);
+    document.getElementById("hoursHelp")
+      .textContent =
+      "Optional for publishers.";
 
-  })
-  .catch(function() {
+  }
+
+});
+
+// Display messages
+function showMessage(text, success) {
+
+  const message =
+    document.getElementById("message");
+
+  message.textContent = text;
+
+  message.className =
+    "message " + (success ? "success" : "error");
+
+  message.style.display = "block";
+
+}
+
+// Submit report
+document.getElementById("reportForm")
+.addEventListener("submit", async function(event) {
+
+  event.preventDefault();
+
+  const publisherName =
+    document.getElementById("publisherName").value.trim();
+
+  const publisher =
+    publishers.find(p => p.name === publisherName);
+
+  if (!publisher) {
+    showMessage(
+      "Please select a valid publisher from the list.",
+      false
+    );
+    return;
+  }
+
+  const reportingMonth =
+    document.getElementById("reportingMonth").value;
+
+  const publisherType =
+    document.getElementById("publisherType").value;
+
+  const hours =
+    document.getElementById("hours").value;
+
+  const bibleStudies =
+    document.getElementById("bibleStudies").value;
+
+  const remarks =
+    document.getElementById("remarks").value.trim();
+
+  const pioneer =
+    publisherType === "Regular Pioneer" ||
+    publisherType === "Auxiliary Pioneer";
+
+  if (pioneer && hours === "") {
+    showMessage(
+      "Please enter your hours.",
+      false
+    );
+    return;
+  }
+
+  const submitButton =
+    document.getElementById("submitButton");
+
+  submitButton.disabled = true;
+
+  submitButton.textContent = "Submitting...";
+
+  const params = new URLSearchParams();
+
+  params.append("publisherName", publisherName);
+  params.append("reportingMonth", reportingMonth);
+  params.append("publisherType", publisherType);
+  params.append("hours", hours);
+  params.append("bibleStudies", bibleStudies);
+  params.append("remarks", remarks);
+
+  try {
+
+    await fetch(SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type":
+          "application/x-www-form-urlencoded"
+      },
+      body: params.toString()
+    });
 
     showMessage(
-      "Unable to send your report. Please check your internet connection and try again.",
-      "error"
+      "Your report has been sent. Please contact your coordinator if you need to confirm submission.",
+      true
     );
 
-    resetSubmitButton();
+    document.getElementById("reportForm").reset();
 
-  });
+    setPreviousMonth();
 
-}
+    document.getElementById("fsgBox")
+      .classList.add("hidden");
 
-// ==========================================
-// VERIFY SAVED REPORT
-// ==========================================
+  } catch (error) {
 
-function verifySubmission(report) {
+    showMessage(
+      "Submission failed. Please try again.",
+      false
+    );
 
-  checkDuplicate(
-    report.publisherName,
-    report.month,
-    function(result) {
+  } finally {
 
-      if (
-        result &&
-        result.success &&
-        result.exists
-      ) {
+    submitButton.disabled = false;
 
-        showMessage(
-          "Report submitted successfully!\n\n" +
-          "Publisher: " +
-          report.publisherName +
-          "\nMonth: " +
-          report.month +
-          "\nFSG: " +
-          (report.fsg || "Unassigned") +
-          "\n\nThank you for submitting your monthly report.",
-          "success"
-        );
+    submitButton.textContent = "SUBMIT REPORT";
 
-        form.reset();
+  }
 
-        setCurrentMonth();
+});
 
-        fsgDisplay.textContent =
-          "Select your name first";
-
-        updateHoursRequirement();
-
-      } else {
-
-        showMessage(
-          "We could not confirm that your report was saved. Please check your submission in a moment or contact your group overseer.",
-          "error"
-        );
-
-      }
-
-      resetSubmitButton();
-
-    }
-  );
-
-}
-
-// ==========================================
-// RESET BUTTON
-// ==========================================
-
-function resetSubmitButton() {
-
-  submitting = false;
-
-  submitButton.disabled =
-    false;
-
-  submitButton.textContent =
-    "Submit Report";
-
-}
-
-// ==========================================
-// INITIALIZE
-// ==========================================
-
-updateHoursRequirement();
-
+// Initialize
+setPreviousMonth();
 loadPublishers();
 
 </script>
