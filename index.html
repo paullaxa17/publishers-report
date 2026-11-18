@@ -6,7 +6,9 @@
 <title>Publishers Report</title>
 
 <style>
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 body {
   font-family: Arial, sans-serif;
@@ -29,6 +31,7 @@ h1 {
   text-align: center;
   color: #234d78;
   margin-bottom: 8px;
+  font-size: 25px;
 }
 
 .subtitle {
@@ -56,6 +59,7 @@ input, select, textarea {
 
 input[readonly] {
   background: #f5f7f9;
+  color: #555;
 }
 
 textarea {
@@ -78,6 +82,7 @@ button {
 
 button:disabled {
   background: #8799aa;
+  cursor: wait;
 }
 
 .message {
@@ -86,6 +91,7 @@ button:disabled {
   padding: 15px;
   border-radius: 8px;
   text-align: center;
+  line-height: 1.5;
 }
 
 .success {
@@ -110,6 +116,13 @@ button:disabled {
   font-size: 12px;
 }
 
+.loading {
+  color: #777;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 10px;
+}
+
 </style>
 </head>
 
@@ -125,23 +138,58 @@ Monthly Field Service Report
 
 <form id="reportForm">
 
+<!-- Publisher Combo Box -->
+
 <label for="name">Publisher's Name</label>
 
-<select id="name" required>
-<option value="">Loading publishers...</option>
-</select>
+<input
+  type="text"
+  id="name"
+  list="publisherList"
+  placeholder="Search or select publisher"
+  autocomplete="off"
+  required
+>
+
+<datalist id="publisherList"></datalist>
+
+<div id="loadingMessage" class="loading">
+Loading publisher list...
+</div>
+
+<!-- Publisher Type -->
 
 <label for="type">Type of Publisher</label>
 
-<input type="text" id="type" readonly>
+<input
+  type="text"
+  id="type"
+  readonly
+  placeholder="Automatically displayed"
+>
+
+<!-- Field Service Group -->
 
 <label for="group">Field Service Group</label>
 
-<input type="text" id="group" readonly>
+<input
+  type="text"
+  id="group"
+  readonly
+  placeholder="Automatically displayed"
+>
+
+<!-- Reporting Month -->
 
 <label for="month">Reporting Month</label>
 
-<input type="month" id="month" required>
+<input
+  type="month"
+  id="month"
+  required
+>
+
+<!-- Hours -->
 
 <label for="hours">Hours</label>
 
@@ -154,6 +202,8 @@ Monthly Field Service Report
   required
 >
 
+<!-- Bible Studies -->
+
 <label for="studies">Bible Studies</label>
 
 <input
@@ -165,6 +215,8 @@ Monthly Field Service Report
   required
 >
 
+<!-- Remarks -->
+
 <label for="remarks">Remarks (Optional)</label>
 
 <textarea
@@ -172,14 +224,20 @@ Monthly Field Service Report
   placeholder="Additional information"
 ></textarea>
 
+<!-- Submit -->
+
 <button type="submit" id="submitButton">
 SUBMIT REPORT
 </button>
 
 </form>
 
+<!-- Messages -->
+
 <div id="successMessage" class="message success"></div>
+
 <div id="errorMessage" class="message error"></div>
+
 <div id="infoMessage" class="message info"></div>
 
 <div class="footer">
@@ -190,26 +248,52 @@ Monthly Field Service Report
 
 <script>
 
-// IMPORTANT: Replace with your actual Apps Script Web App URL
+// ========================================
+// GOOGLE APPS SCRIPT WEB APP URL
+// ========================================
+
 const scriptURL = "https://script.google.com/macros/s/AKfycbxiuyI0MiiUR_PYyt4grh3-bTyFQOAeHA3VBBfYLTwjr_2BVlZhXtNBvF9_aFAUeq_z/exec";
 
+// ========================================
+// ELEMENTS
+// ========================================
+
 const form = document.getElementById("reportForm");
-const nameSelect = document.getElementById("name");
+
+const nameInput = document.getElementById("name");
+
+const publisherList = document.getElementById("publisherList");
+
 const typeInput = document.getElementById("type");
+
 const groupInput = document.getElementById("group");
+
 const monthInput = document.getElementById("month");
+
 const submitButton = document.getElementById("submitButton");
+
+const loadingMessage = document.getElementById("loadingMessage");
+
+// ========================================
+// DATA
+// ========================================
 
 let publishers = [];
 
-// Default reporting month
+// ========================================
+// DEFAULT REPORTING MONTH
+// ========================================
+
 const now = new Date();
 
 monthInput.value =
   now.getFullYear() + "-" +
   String(now.getMonth() + 1).padStart(2, "0");
 
-// JSONP function for Google Apps Script GET requests
+// ========================================
+// JSONP CONNECTION
+// ========================================
+
 function jsonp(params) {
 
   return new Promise((resolve, reject) => {
@@ -228,32 +312,53 @@ function jsonp(params) {
     script.src = scriptURL + "?" + query.toString();
 
     window[callbackName] = function(data) {
+
       resolve(data);
+
       script.remove();
+
       delete window[callbackName];
+
     };
 
     script.onerror = function() {
-      reject(new Error("Unable to connect to report system."));
+
+      reject(
+        new Error("Unable to connect to report system.")
+      );
+
       script.remove();
+
       delete window[callbackName];
+
     };
 
     document.body.appendChild(script);
 
     setTimeout(() => {
+
       if (window[callbackName]) {
+
         delete window[callbackName];
+
         script.remove();
-        reject(new Error("Connection timed out."));
+
+        reject(
+          new Error("Connection timed out.")
+        );
+
       }
+
     }, 15000);
 
   });
 
 }
 
-// Load publisher database
+// ========================================
+// LOAD PUBLISHERS
+// ========================================
+
 async function loadPublishers() {
 
   try {
@@ -263,31 +368,32 @@ async function loadPublishers() {
     });
 
     if (!result.success) {
+
       throw new Error("Unable to load publishers.");
+
     }
 
-    publishers = result.publishers;
+    publishers = result.publishers || [];
 
-    nameSelect.innerHTML =
-      '<option value="">Select your name</option>';
+    publisherList.innerHTML = "";
 
     publishers.forEach(publisher => {
 
       const option = document.createElement("option");
 
+      // Publisher names only - NO FSG
       option.value = publisher.name;
 
-      option.textContent =
-        publisher.name + " — " + publisher.group;
-
-      nameSelect.appendChild(option);
+      publisherList.appendChild(option);
 
     });
 
+    loadingMessage.style.display = "none";
+
   } catch (error) {
 
-    nameSelect.innerHTML =
-      '<option value="">Unable to load publisher list</option>';
+    loadingMessage.textContent =
+      "Unable to load publisher list. Please refresh the page.";
 
     showError(
       "Unable to load publisher list. Please refresh the page."
@@ -297,28 +403,39 @@ async function loadPublishers() {
 
 }
 
-// Display publisher information
-nameSelect.addEventListener("change", function() {
+// ========================================
+// PUBLISHER SELECTION
+// ========================================
+
+nameInput.addEventListener("input", function() {
+
+  const selectedName = nameInput.value.trim();
 
   const publisher = publishers.find(
-    p => p.name === nameSelect.value
+    p => p.name.toLowerCase() ===
+         selectedName.toLowerCase()
   );
 
   if (publisher) {
 
     typeInput.value = publisher.type;
+
     groupInput.value = publisher.group;
 
   } else {
 
     typeInput.value = "";
+
     groupInput.value = "";
 
   }
 
 });
 
-// Check duplicate before submission
+// ========================================
+// DUPLICATE CHECK
+// ========================================
+
 async function checkReport(name, month) {
 
   return await jsonp({
@@ -329,80 +446,154 @@ async function checkReport(name, month) {
 
 }
 
-// Submit report
+// ========================================
+// FORM SUBMISSION
+// ========================================
+
 form.addEventListener("submit", async function(event) {
 
   event.preventDefault();
 
   hideMessages();
 
-  const name = nameSelect.value;
-  const month = monthInput.value;
-  const hours = document.getElementById("hours").value;
-  const studies = document.getElementById("studies").value;
-  const remarks = document.getElementById("remarks").value;
+  const name = nameInput.value.trim();
 
-  if (!name || !month) {
-    showError("Please complete all required fields.");
+  const month = monthInput.value;
+
+  const hours = document.getElementById("hours").value;
+
+  const studies = document.getElementById("studies").value;
+
+  const remarks = document.getElementById("remarks").value.trim();
+
+  // Validate publisher against official database
+
+  const publisher = publishers.find(
+    p => p.name.toLowerCase() === name.toLowerCase()
+  );
+
+  if (!publisher) {
+
+    showError(
+      "Please select a valid publisher from the official list."
+    );
+
+    nameInput.focus();
+
     return;
+
+  }
+
+  if (!month) {
+
+    showError("Please select the reporting month.");
+
+    return;
+
+  }
+
+  if (hours === "" || studies === "") {
+
+    showError(
+      "Please enter both Hours and Bible Studies."
+    );
+
+    return;
+
+  }
+
+  if (Number(hours) < 0 || Number(studies) < 0) {
+
+    showError("Values cannot be negative.");
+
+    return;
+
   }
 
   submitButton.disabled = true;
+
   submitButton.textContent = "Checking report...";
 
   try {
 
-    // Check if report already exists
+    // Check duplicate report
+
     const check = await checkReport(name, month);
+
+    if (!check.success) {
+
+      throw new Error(
+        check.message || "Unable to verify report."
+      );
+
+    }
 
     if (check.duplicate) {
 
       showError(
-        "A report for this month has already been submitted. " +
-        "Please contact your report administrator if you need to make a correction."
+        "A report for " + month +
+        " has already been submitted by " + name +
+        ". Please contact your report administrator if you need to make a correction."
       );
 
       submitButton.disabled = false;
+
       submitButton.textContent = "SUBMIT REPORT";
+
       return;
 
     }
 
-    if (!check.success) {
-      throw new Error(check.message || "Unable to verify report.");
-    }
+    // Submit data
 
     submitButton.textContent = "Submitting...";
 
     const data = {
-      name: name,
+
+      name: publisher.name,
+
       month: month,
-      hours: hours,
-      studies: studies,
+
+      hours: Number(hours),
+
+      studies: Number(studies),
+
       remarks: remarks
+
     };
 
-    // Send report to Google Apps Script
     await fetch(scriptURL, {
+
       method: "POST",
+
       mode: "no-cors",
+
       headers: {
+
         "Content-Type": "text/plain;charset=utf-8"
+
       },
+
       body: JSON.stringify(data)
+
     });
 
+    // Confirmation
+
     showSuccess(
-      "Your report has been sent. Thank you!"
+      "Your report has been submitted. Thank you!"
     );
 
     form.reset();
+
+    // Restore current month
 
     monthInput.value =
       now.getFullYear() + "-" +
       String(now.getMonth() + 1).padStart(2, "0");
 
     typeInput.value = "";
+
     groupInput.value = "";
 
   } catch (error) {
@@ -414,15 +605,21 @@ form.addEventListener("submit", async function(event) {
   }
 
   submitButton.disabled = false;
+
   submitButton.textContent = "SUBMIT REPORT";
 
 });
+
+// ========================================
+// MESSAGE FUNCTIONS
+// ========================================
 
 function showSuccess(message) {
 
   const element = document.getElementById("successMessage");
 
   element.textContent = message;
+
   element.style.display = "block";
 
 }
@@ -432,6 +629,7 @@ function showError(message) {
   const element = document.getElementById("errorMessage");
 
   element.textContent = message;
+
   element.style.display = "block";
 
 }
@@ -439,12 +637,17 @@ function showError(message) {
 function hideMessages() {
 
   document.getElementById("successMessage").style.display = "none";
+
   document.getElementById("errorMessage").style.display = "none";
+
   document.getElementById("infoMessage").style.display = "none";
 
 }
 
-// Load publishers when website opens
+// ========================================
+// INITIALIZATION
+// ========================================
+
 loadPublishers();
 
 </script>
