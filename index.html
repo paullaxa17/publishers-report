@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Publishers Report</title>
+
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: Arial, sans-serif;
+    background: #f2f5f8;
+    margin: 0;
+    padding: 20px;
+    color: #263445;
+  }
+
+  .container {
+    max-width: 480px;
+    margin: 30px auto;
+    background: white;
+    padding: 28px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+
+  h1 {
+    text-align: center;
+    color: #234d78;
+    margin-bottom: 8px;
+    font-size: 25px;
+  }
+
+  .subtitle {
+    text-align: center;
+    color: #777;
+    margin-bottom: 28px;
+    font-size: 14px;
+  }
+
+  label {
+    display: block;
+    font-weight: bold;
+    margin-top: 18px;
+    margin-bottom: 8px;
+  }
+
+  input, select, textarea {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #d0d7de;
+    border-radius: 8px;
+    font-size: 16px;
+    background: white;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 90px;
+  }
+
+  button {
+    width: 100%;
+    margin-top: 25px;
+    padding: 15px;
+    background: #234d78;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  button:disabled {
+    background: #8799aa;
+    cursor: wait;
+  }
+
+  .message {
+    display: none;
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+  }
+
+  .success {
+    background: #e8f5e9;
+    color: #216e39;
+  }
+
+  .error {
+    background: #ffebee;
+    color: #b71c1c;
+  }
+
+  .footer {
+    text-align: center;
+    margin-top: 20px;
+    color: #999;
+    font-size: 12px;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>Publishers Report</h1>
+
+  <div class="subtitle">
+    Monthly Field Service Report
+  </div>
+
+  <form id="reportForm">
+
+    <label for="name">Publisher's Name</label>
+    <input
+      type="text"
+      id="name"
+      name="name"
+      placeholder="Enter your name"
+      required
+    >
+
+    <label for="month">Reporting Month</label>
+    <input
+      type="month"
+      id="month"
+      name="month"
+      required
+    >
+
+    <label for="type">Type of Publisher</label>
+    <select id="type" name="type" required>
+      <option value="">Select publisher type</option>
+      <option value="Publisher">Publisher</option>
+      <option value="Auxiliary Pioneer">Auxiliary Pioneer</option>
+      <option value="Regular Pioneer">Regular Pioneer</option>
+    </select>
+
+    <label for="hours">Hours</label>
+    <input
+      type="number"
+      id="hours"
+      name="hours"
+      min="0"
+      step="0.5"
+      placeholder="Enter hours"
+      required
+    >
+
+    <label for="studies">Bible Studies</label>
+    <input
+      type="number"
+      id="studies"
+      name="studies"
+      min="0"
+      step="1"
+      placeholder="Number of Bible studies"
+      required
+    >
+
+    <label for="remarks">Remarks (Optional)</label>
+    <textarea
+      id="remarks"
+      name="remarks"
+      placeholder="Additional information"
+    ></textarea>
+
+    <button type="submit" id="submitButton">
+      SUBMIT REPORT
+    </button>
+
+  </form>
+
+  <div id="successMessage" class="message success">
+    Your report has been submitted. Thank you!
+  </div>
+
+  <div id="errorMessage" class="message error">
+    Something went wrong. Please try again.
+  </div>
+
+  <div class="footer">
+    Monthly Field Service Report
+  </div>
+
+</div>
+
+<script>
+
+const scriptURL = "https://script.google.com/macros/s/AKfycbxiuyI0MiiUR_PYyt4grh3-bTyFQOAeHA3VBBfYLTwjr_2BVlZhXtNBvF9_aFAUeq_z/exec";
+
+const form = document.getElementById("reportForm");
+const submitButton = document.getElementById("submitButton");
+
+form.addEventListener("submit", async function(event) {
+
+  event.preventDefault();
+
+  submitButton.disabled = true;
+  submitButton.textContent = "Submitting...";
+
+  document.getElementById("successMessage").style.display = "none";
+  document.getElementById("errorMessage").style.display = "none";
+
+  const data = {
+    name: document.getElementById("name").value.trim(),
+    month: document.getElementById("month").value,
+    type: document.getElementById("type").value,
+    hours: document.getElementById("hours").value,
+    studies: document.getElementById("studies").value,
+    remarks: document.getElementById("remarks").value.trim()
+  };
+
+  try {
+
+    await fetch(scriptURL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"
+      },
+      body: JSON.stringify(data)
+    });
+
+    document.getElementById("successMessage").style.display = "block";
+
+    form.reset();
+
+  } catch (error) {
+
+    document.getElementById("errorMessage").style.display = "block";
+
+  }
+
+  submitButton.disabled = false;
+  submitButton.textContent = "SUBMIT REPORT";
+
+});
+
+</script>
+
+</body>
+</html>
