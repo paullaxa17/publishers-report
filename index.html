@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Publishers Report</title>
+
+<title>Publishers Monthly Report</title>
 
 <style>
 * {
@@ -11,55 +12,62 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
-  background: #f2f5f8;
   margin: 0;
-  padding: 20px;
-  color: #263445;
+  padding: 16px;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f1f5f9;
+  color: #1e293b;
 }
 
 .container {
   max-width: 480px;
-  margin: 25px auto;
-  background: white;
-  padding: 28px;
+  margin: 20px auto;
+  padding: 24px;
+  background: #ffffff;
   border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0,0,0,.08);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
 }
 
-h1 {
+.header {
   text-align: center;
-  color: #234d78;
-  margin-bottom: 8px;
-  font-size: 25px;
+  margin-bottom: 24px;
 }
 
-.subtitle {
-  text-align: center;
-  color: #777;
-  margin-bottom: 25px;
+.header h1 {
+  font-size: 24px;
+  margin: 0 0 8px;
+}
+
+.header p {
+  color: #64748b;
   font-size: 14px;
+  margin: 0;
 }
 
 label {
   display: block;
-  font-weight: bold;
+  font-weight: 600;
   margin-top: 18px;
-  margin-bottom: 8px;
+  margin-bottom: 7px;
 }
 
-input, select, textarea {
+input,
+select,
+textarea {
   width: 100%;
   padding: 13px;
-  border: 1px solid #d0d7de;
-  border-radius: 8px;
   font-size: 16px;
-  background: white;
+  border: 1px solid #cbd5e1;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #1e293b;
 }
 
-input[readonly] {
-  background: #f5f7f9;
-  color: #555;
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid #2563eb;
+  border-color: #2563eb;
 }
 
 textarea {
@@ -67,62 +75,85 @@ textarea {
   min-height: 90px;
 }
 
+.fsg-box {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 9px;
+  padding: 13px;
+  margin-top: 5px;
+  color: #1d4ed8;
+  font-weight: 600;
+}
+
+.help {
+  font-size: 13px;
+  color: #64748b;
+  margin-top: 6px;
+}
+
+.required {
+  color: #dc2626;
+}
+
 button {
   width: 100%;
-  margin-top: 25px;
   padding: 15px;
-  background: #234d78;
+  margin-top: 24px;
+  background: #2563eb;
   color: white;
   border: none;
-  border-radius: 8px;
-  font-size: 16px;
+  border-radius: 9px;
+  font-size: 17px;
   font-weight: bold;
   cursor: pointer;
 }
 
+button:hover {
+  background: #1d4ed8;
+}
+
 button:disabled {
-  background: #8799aa;
-  cursor: wait;
+  background: #94a3b8;
+  cursor: not-allowed;
 }
 
 .message {
   display: none;
-  margin-top: 20px;
-  padding: 15px;
-  border-radius: 8px;
-  text-align: center;
+  margin-top: 18px;
+  padding: 14px;
+  border-radius: 9px;
+  font-size: 14px;
   line-height: 1.5;
 }
 
 .success {
-  background: #e8f5e9;
-  color: #216e39;
+  display: block;
+  background: #dcfce7;
+  color: #166534;
 }
 
 .error {
-  background: #ffebee;
-  color: #b71c1c;
+  display: block;
+  background: #fee2e2;
+  color: #991b1b;
 }
 
 .info {
-  background: #e3f2fd;
-  color: #154c79;
+  display: block;
+  background: #dbeafe;
+  color: #1e40af;
 }
 
 .footer {
   text-align: center;
-  margin-top: 20px;
-  color: #999;
   font-size: 12px;
+  color: #94a3b8;
+  margin-top: 22px;
 }
 
-.loading {
-  color: #777;
-  font-size: 14px;
-  text-align: center;
-  margin-top: 10px;
+.hidden {
+  display: none !important;
 }
-
 </style>
 </head>
 
@@ -130,523 +161,854 @@ button:disabled {
 
 <div class="container">
 
-<h1>Publishers Report</h1>
+  <div class="header">
 
-<div class="subtitle">
-Monthly Field Service Report
-</div>
+    <h1>Monthly Publishers Report</h1>
 
-<form id="reportForm">
+    <p>Submit your monthly field service report</p>
 
-<!-- Publisher Combo Box -->
+  </div>
 
-<label for="name">Publisher's Name</label>
+  <form id="reportForm">
 
-<input
-  type="text"
-  id="name"
-  list="publisherList"
-  placeholder="Search or select publisher"
-  autocomplete="off"
-  required
->
+    <!-- PUBLISHER NAME -->
 
-<datalist id="publisherList"></datalist>
+    <label for="publisher">
+      Publisher Name <span class="required">*</span>
+    </label>
 
-<div id="loadingMessage" class="loading">
-Loading publisher list...
-</div>
+    <select id="publisher" required>
 
-<!-- Publisher Type -->
+      <option value="">Loading publishers...</option>
 
-<label for="type">Type of Publisher</label>
+    </select>
 
-<input
-  type="text"
-  id="type"
-  readonly
-  placeholder="Automatically displayed"
->
+    <!-- FSG -->
 
-<!-- Field Service Group -->
+    <label>Field Service Group</label>
 
-<label for="group">Field Service Group</label>
+    <div id="fsgDisplay" class="fsg-box">
 
-<input
-  type="text"
-  id="group"
-  readonly
-  placeholder="Automatically displayed"
->
+      Select your name first
 
-<!-- Reporting Month -->
+    </div>
 
-<label for="month">Reporting Month</label>
+    <!-- REPORTING MONTH -->
 
-<input
-  type="month"
-  id="month"
-  required
->
+    <label for="month">
+      Reporting Month <span class="required">*</span>
+    </label>
 
-<!-- Hours -->
+    <input
+      type="month"
+      id="month"
+      required
+    >
 
-<label for="hours">Hours</label>
+    <!-- PUBLISHER TYPE -->
 
-<input
-  type="number"
-  id="hours"
-  min="0"
-  step="0.5"
-  placeholder="Enter hours"
-  required
->
+    <label for="publisherType">
+      Publisher Type <span class="required">*</span>
+    </label>
 
-<!-- Bible Studies -->
+    <select id="publisherType" required>
 
-<label for="studies">Bible Studies</label>
+      <option value="">Select publisher type</option>
 
-<input
-  type="number"
-  id="studies"
-  min="0"
-  step="1"
-  placeholder="Number of Bible studies"
-  required
->
+      <option value="Publisher">
+        Publisher
+      </option>
 
-<!-- Remarks -->
+      <option value="Regular Pioneer">
+        Regular Pioneer
+      </option>
 
-<label for="remarks">Remarks (Optional)</label>
+      <option value="Auxiliary Pioneer">
+        Auxiliary Pioneer
+      </option>
 
-<textarea
-  id="remarks"
-  placeholder="Additional information"
-></textarea>
+    </select>
 
-<!-- Submit -->
+    <!-- HOURS -->
 
-<button type="submit" id="submitButton">
-SUBMIT REPORT
-</button>
+    <label for="hours">
 
-</form>
+      Hours
 
-<!-- Messages -->
+      <span id="hoursRequired" class="required hidden">
+        *
+      </span>
 
-<div id="successMessage" class="message success"></div>
+    </label>
 
-<div id="errorMessage" class="message error"></div>
+    <input
+      type="number"
+      id="hours"
+      min="0"
+      step="0.25"
+      placeholder="Enter hours"
+    >
 
-<div id="infoMessage" class="message info"></div>
+    <div id="hoursHelp" class="help">
 
-<div class="footer">
-Monthly Field Service Report
-</div>
+      Optional for publishers. Required for pioneers.
+
+    </div>
+
+    <!-- BIBLE STUDIES -->
+
+    <label for="studies">
+      Bible Studies
+    </label>
+
+    <input
+      type="number"
+      id="studies"
+      min="0"
+      step="1"
+      placeholder="Optional"
+    >
+
+    <!-- REMARKS -->
+
+    <label for="remarks">
+      Remarks
+    </label>
+
+    <textarea
+      id="remarks"
+      placeholder="Optional remarks"
+    ></textarea>
+
+    <!-- SUBMIT -->
+
+    <button
+      type="submit"
+      id="submitButton"
+    >
+
+      Submit Report
+
+    </button>
+
+    <!-- MESSAGE -->
+
+    <div
+      id="message"
+      class="message"
+    ></div>
+
+  </form>
+
+  <div class="footer">
+
+    Publishers Monthly Reporting System
+
+  </div>
 
 </div>
 
 <script>
 
-// ========================================
-// GOOGLE APPS SCRIPT WEB APP URL
-// ========================================
+// ==========================================
+// GOOGLE APPS SCRIPT URL
+// ==========================================
 
-const scriptURL = "https://script.google.com/macros/s/AKfycbxiuyI0MiiUR_PYyt4grh3-bTyFQOAeHA3VBBfYLTwjr_2BVlZhXtNBvF9_aFAUeq_z/exec";
+const SCRIPT_URL =
+"https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec";
 
-// ========================================
+// ==========================================
 // ELEMENTS
-// ========================================
+// ==========================================
 
-const form = document.getElementById("reportForm");
+const publisherSelect =
+document.getElementById("publisher");
 
-const nameInput = document.getElementById("name");
+const fsgDisplay =
+document.getElementById("fsgDisplay");
 
-const publisherList = document.getElementById("publisherList");
+const publisherType =
+document.getElementById("publisherType");
 
-const typeInput = document.getElementById("type");
+const hoursInput =
+document.getElementById("hours");
 
-const groupInput = document.getElementById("group");
+const hoursHelp =
+document.getElementById("hoursHelp");
 
-const monthInput = document.getElementById("month");
+const hoursRequired =
+document.getElementById("hoursRequired");
 
-const submitButton = document.getElementById("submitButton");
+const studiesInput =
+document.getElementById("studies");
 
-const loadingMessage = document.getElementById("loadingMessage");
+const remarksInput =
+document.getElementById("remarks");
 
-// ========================================
-// DATA
-// ========================================
+const monthInput =
+document.getElementById("month");
+
+const submitButton =
+document.getElementById("submitButton");
+
+const message =
+document.getElementById("message");
+
+const form =
+document.getElementById("reportForm");
+
+// ==========================================
+// VARIABLES
+// ==========================================
 
 let publishers = [];
 
-// ========================================
+let submitting = false;
+
+// ==========================================
 // DEFAULT REPORTING MONTH
-// ========================================
+// ==========================================
 
-const now = new Date();
+function setCurrentMonth() {
 
-monthInput.value =
-  now.getFullYear() + "-" +
-  String(now.getMonth() + 1).padStart(2, "0");
+  const now = new Date();
 
-// ========================================
-// JSONP CONNECTION
-// ========================================
+  const year = now.getFullYear();
 
-function jsonp(params) {
+  const month = String(
+    now.getMonth() + 1
+  ).padStart(2, "0");
 
-  return new Promise((resolve, reject) => {
+  monthInput.value =
+    year + "-" + month;
 
-    const callbackName =
-      "jsonp_" + Date.now() + "_" +
-      Math.floor(Math.random() * 100000);
+}
 
-    const script = document.createElement("script");
+setCurrentMonth();
 
-    const query = new URLSearchParams({
-      ...params,
-      callback: callbackName
-    });
+// ==========================================
+// JSONP REQUEST
+// ==========================================
 
-    script.src = scriptURL + "?" + query.toString();
+function jsonp(url, callback) {
 
-    window[callbackName] = function(data) {
+  const callbackName =
+    "callback_" +
+    Date.now() +
+    "_" +
+    Math.floor(Math.random() * 1000000);
 
-      resolve(data);
+  const script =
+    document.createElement("script");
 
-      script.remove();
+  let finished = false;
 
-      delete window[callbackName];
+  const timeout =
+    setTimeout(function() {
 
-    };
+      if (finished) return;
 
-    script.onerror = function() {
-
-      reject(
-        new Error("Unable to connect to report system.")
-      );
-
-      script.remove();
+      finished = true;
 
       delete window[callbackName];
 
-    };
+      script.remove();
 
-    document.body.appendChild(script);
-
-    setTimeout(() => {
-
-      if (window[callbackName]) {
-
-        delete window[callbackName];
-
-        script.remove();
-
-        reject(
-          new Error("Connection timed out.")
-        );
-
-      }
+      callback({
+        success: false,
+        message: "Request timed out"
+      });
 
     }, 15000);
 
-  });
+  window[callbackName] =
+  function(data) {
+
+    if (finished) return;
+
+    finished = true;
+
+    clearTimeout(timeout);
+
+    delete window[callbackName];
+
+    script.remove();
+
+    callback(data);
+
+  };
+
+  script.onerror =
+  function() {
+
+    if (finished) return;
+
+    finished = true;
+
+    clearTimeout(timeout);
+
+    delete window[callbackName];
+
+    script.remove();
+
+    callback({
+      success: false,
+      message: "Unable to connect to Google Sheets"
+    });
+
+  };
+
+  script.src =
+    url +
+    "&callback=" +
+    callbackName;
+
+  document.body.appendChild(script);
 
 }
 
-// ========================================
+// ==========================================
 // LOAD PUBLISHERS
-// ========================================
+// ==========================================
 
-async function loadPublishers() {
+function loadPublishers() {
 
-  try {
+  publisherSelect.innerHTML =
+    '<option value="">Loading publishers...</option>';
 
-    const result = await jsonp({
-      action: "publishers"
-    });
+  jsonp(
+    SCRIPT_URL + "?action=publishers",
+    function(data) {
 
-    if (!result.success) {
+      if (!data || !data.success) {
 
-      throw new Error("Unable to load publishers.");
+        publisherSelect.innerHTML =
+          '<option value="">Unable to load publishers</option>';
+
+        showMessage(
+          "Unable to load publisher list. Please refresh the page.",
+          "error"
+        );
+
+        return;
+
+      }
+
+      publishers =
+        data.publishers || [];
+
+      publisherSelect.innerHTML =
+        '<option value="">Select your name</option>';
+
+      publishers.forEach(function(publisher) {
+
+        const option =
+          document.createElement("option");
+
+        option.value =
+          publisher.name;
+
+        option.textContent =
+          publisher.name;
+
+        publisherSelect.appendChild(option);
+
+      });
 
     }
-
-    publishers = result.publishers || [];
-
-    publisherList.innerHTML = "";
-
-    publishers.forEach(publisher => {
-
-      const option = document.createElement("option");
-
-      // Publisher names only - NO FSG
-      option.value = publisher.name;
-
-      publisherList.appendChild(option);
-
-    });
-
-    loadingMessage.style.display = "none";
-
-  } catch (error) {
-
-    loadingMessage.textContent =
-      "Unable to load publisher list. Please refresh the page.";
-
-    showError(
-      "Unable to load publisher list. Please refresh the page."
-    );
-
-  }
+  );
 
 }
 
-// ========================================
-// PUBLISHER SELECTION
-// ========================================
+// ==========================================
+// SELECT PUBLISHER
+// ==========================================
 
-nameInput.addEventListener("input", function() {
+publisherSelect.addEventListener(
+  "change",
+  function() {
 
-  const selectedName = nameInput.value.trim();
+    const selectedPublisher =
+      publishers.find(function(publisher) {
 
-  const publisher = publishers.find(
-    p => p.name.toLowerCase() ===
-         selectedName.toLowerCase()
-  );
+        return publisher.name ===
+          publisherSelect.value;
 
-  if (publisher) {
+      });
 
-    typeInput.value = publisher.type;
+    if (selectedPublisher) {
 
-    groupInput.value = publisher.group;
+      fsgDisplay.textContent =
+        selectedPublisher.fsg ||
+        "FSG not assigned";
 
-  } else {
+      // Automatically populate type
+      // if master database has a type
 
-    typeInput.value = "";
+      if (selectedPublisher.type) {
 
-    groupInput.value = "";
+        publisherType.value =
+          selectedPublisher.type;
+
+        updateHoursRequirement();
+
+      }
+
+    } else {
+
+      fsgDisplay.textContent =
+        "Select your name first";
+
+      publisherType.value = "";
+
+      updateHoursRequirement();
+
+    }
 
   }
+);
 
-});
+// ==========================================
+// HOURS REQUIREMENT
+// ==========================================
 
-// ========================================
+function updateHoursRequirement() {
+
+  const type =
+    publisherType.value;
+
+  const isPioneer =
+    type === "Regular Pioneer" ||
+    type === "Auxiliary Pioneer";
+
+  hoursInput.required =
+    isPioneer;
+
+  hoursRequired.classList.toggle(
+    "hidden",
+    !isPioneer
+  );
+
+  hoursHelp.textContent =
+    isPioneer
+      ? "Hours are required for this publisher type."
+      : "Hours are optional for publishers.";
+
+}
+
+publisherType.addEventListener(
+  "change",
+  updateHoursRequirement
+);
+
+// ==========================================
+// MESSAGE DISPLAY
+// ==========================================
+
+function showMessage(text, type) {
+
+  message.className =
+    "message " + type;
+
+  message.textContent =
+    text;
+
+  message.style.display =
+    "block";
+
+}
+
+function hideMessage() {
+
+  message.className =
+    "message";
+
+  message.textContent =
+    "";
+
+  message.style.display =
+    "none";
+
+}
+
+// ==========================================
 // DUPLICATE CHECK
-// ========================================
+// ==========================================
 
-async function checkReport(name, month) {
+function checkDuplicate(
+  publisherName,
+  month,
+  callback
+) {
 
-  return await jsonp({
-    action: "check",
-    name: name,
-    month: month
-  });
+  const url =
+    SCRIPT_URL +
+    "?action=check" +
+    "&name=" +
+    encodeURIComponent(publisherName) +
+    "&month=" +
+    encodeURIComponent(month);
+
+  jsonp(url, callback);
 
 }
 
-// ========================================
-// FORM SUBMISSION
-// ========================================
+// ==========================================
+// SUBMISSION
+// ==========================================
 
-form.addEventListener("submit", async function(event) {
+form.addEventListener(
+  "submit",
+  function(event) {
 
-  event.preventDefault();
+    event.preventDefault();
 
-  hideMessages();
+    if (submitting) return;
 
-  const name = nameInput.value.trim();
+    hideMessage();
 
-  const month = monthInput.value;
+    // --------------------------------------
+    // VALIDATE PUBLISHER
+    // --------------------------------------
 
-  const hours = document.getElementById("hours").value;
+    const selectedPublisher =
+      publishers.find(function(publisher) {
 
-  const studies = document.getElementById("studies").value;
+        return publisher.name ===
+          publisherSelect.value;
 
-  const remarks = document.getElementById("remarks").value.trim();
+      });
 
-  // Validate publisher against official database
+    if (!selectedPublisher) {
 
-  const publisher = publishers.find(
-    p => p.name.toLowerCase() === name.toLowerCase()
-  );
-
-  if (!publisher) {
-
-    showError(
-      "Please select a valid publisher from the official list."
-    );
-
-    nameInput.focus();
-
-    return;
-
-  }
-
-  if (!month) {
-
-    showError("Please select the reporting month.");
-
-    return;
-
-  }
-
-  if (hours === "" || studies === "") {
-
-    showError(
-      "Please enter both Hours and Bible Studies."
-    );
-
-    return;
-
-  }
-
-  if (Number(hours) < 0 || Number(studies) < 0) {
-
-    showError("Values cannot be negative.");
-
-    return;
-
-  }
-
-  submitButton.disabled = true;
-
-  submitButton.textContent = "Checking report...";
-
-  try {
-
-    // Check duplicate report
-
-    const check = await checkReport(name, month);
-
-    if (!check.success) {
-
-      throw new Error(
-        check.message || "Unable to verify report."
+      showMessage(
+        "Please select your publisher name.",
+        "error"
       );
-
-    }
-
-    if (check.duplicate) {
-
-      showError(
-        "A report for " + month +
-        " has already been submitted by " + name +
-        ". Please contact your report administrator if you need to make a correction."
-      );
-
-      submitButton.disabled = false;
-
-      submitButton.textContent = "SUBMIT REPORT";
 
       return;
 
     }
 
-    // Submit data
+    // --------------------------------------
+    // VALIDATE MONTH
+    // --------------------------------------
 
-    submitButton.textContent = "Submitting...";
+    const month =
+      monthInput.value;
 
-    const data = {
+    if (!month) {
 
-      name: publisher.name,
+      showMessage(
+        "Please select the reporting month.",
+        "error"
+      );
 
-      month: month,
+      return;
 
-      hours: Number(hours),
+    }
 
-      studies: Number(studies),
+    // --------------------------------------
+    // VALIDATE TYPE
+    // --------------------------------------
 
-      remarks: remarks
+    const type =
+      publisherType.value;
+
+    if (!type) {
+
+      showMessage(
+        "Please select your publisher type.",
+        "error"
+      );
+
+      return;
+
+    }
+
+    // --------------------------------------
+    // VALIDATE HOURS
+    // --------------------------------------
+
+    const hours =
+      hoursInput.value;
+
+    const isPioneer =
+      type === "Regular Pioneer" ||
+      type === "Auxiliary Pioneer";
+
+    if (isPioneer && hours === "") {
+
+      showMessage(
+        "Hours are required for Regular Pioneers and Auxiliary Pioneers.",
+        "error"
+      );
+
+      hoursInput.focus();
+
+      return;
+
+    }
+
+    if (
+      hours !== "" &&
+      (
+        Number(hours) < 0 ||
+        isNaN(Number(hours))
+      )
+    ) {
+
+      showMessage(
+        "Please enter valid hours.",
+        "error"
+      );
+
+      return;
+
+    }
+
+    // --------------------------------------
+    // VALIDATE BIBLE STUDIES
+    // --------------------------------------
+
+    const studies =
+      studiesInput.value;
+
+    if (
+      studies !== "" &&
+      (
+        Number(studies) < 0 ||
+        !Number.isInteger(Number(studies))
+      )
+    ) {
+
+      showMessage(
+        "Bible Studies must be a whole number.",
+        "error"
+      );
+
+      return;
+
+    }
+
+    // --------------------------------------
+    // REPORT DATA
+    // --------------------------------------
+
+    const report = {
+
+      publisherName:
+        selectedPublisher.name,
+
+      fsg:
+        selectedPublisher.fsg,
+
+      month:
+        month,
+
+      publisherType:
+        type,
+
+      hours:
+        hours === ""
+          ? ""
+          : Number(hours),
+
+      bibleStudies:
+        studies === ""
+          ? ""
+          : Number(studies),
+
+      remarks:
+        remarksInput.value.trim()
 
     };
 
-    await fetch(scriptURL, {
+    // --------------------------------------
+    // DISABLE SUBMIT
+    // --------------------------------------
 
-      method: "POST",
+    submitting = true;
 
-      mode: "no-cors",
+    submitButton.disabled =
+      true;
 
-      headers: {
+    submitButton.textContent =
+      "Checking report...";
 
-        "Content-Type": "text/plain;charset=utf-8"
+    // --------------------------------------
+    // CHECK DUPLICATE FIRST
+    // --------------------------------------
 
-      },
+    checkDuplicate(
+      report.publisherName,
+      report.month,
+      function(result) {
 
-      body: JSON.stringify(data)
+        if (!result || result.success === false) {
 
-    });
+          showMessage(
+            "Unable to verify duplicate reports. Please try again.",
+            "error"
+          );
 
-    // Confirmation
+          resetSubmitButton();
 
-    showSuccess(
-      "Your report has been submitted. Thank you!"
-    );
+          return;
 
-    form.reset();
+        }
 
-    // Restore current month
+        if (result.exists) {
 
-    monthInput.value =
-      now.getFullYear() + "-" +
-      String(now.getMonth() + 1).padStart(2, "0");
+          showMessage(
+            "You already submitted a report for " +
+            report.month +
+            ". Duplicate reports are not allowed.",
+            "error"
+          );
 
-    typeInput.value = "";
+          resetSubmitButton();
 
-    groupInput.value = "";
+          return;
 
-  } catch (error) {
+        }
 
-    showError(
-      "Unable to submit your report. Please try again or contact your report administrator."
+        // ----------------------------------
+        // SUBMIT REPORT
+        // ----------------------------------
+
+        submitButton.textContent =
+          "Submitting report...";
+
+        submitReport(report);
+
+      }
     );
 
   }
+);
 
-  submitButton.disabled = false;
+// ==========================================
+// SUBMIT TO GOOGLE APPS SCRIPT
+// ==========================================
 
-  submitButton.textContent = "SUBMIT REPORT";
+function submitReport(report) {
 
-});
+  fetch(SCRIPT_URL, {
 
-// ========================================
-// MESSAGE FUNCTIONS
-// ========================================
+    method: "POST",
 
-function showSuccess(message) {
+    mode: "no-cors",
 
-  const element = document.getElementById("successMessage");
+    headers: {
 
-  element.textContent = message;
+      "Content-Type":
+        "text/plain;charset=utf-8"
 
-  element.style.display = "block";
+    },
+
+    body: JSON.stringify(report)
+
+  })
+  .then(function() {
+
+    // Because no-cors cannot read Google's response,
+    // verify by checking the Responses sheet.
+
+    submitButton.textContent =
+      "Verifying submission...";
+
+    verifySubmission(report);
+
+  })
+  .catch(function() {
+
+    showMessage(
+      "Unable to send your report. Please check your internet connection and try again.",
+      "error"
+    );
+
+    resetSubmitButton();
+
+  });
 
 }
 
-function showError(message) {
+// ==========================================
+// VERIFY SAVED REPORT
+// ==========================================
 
-  const element = document.getElementById("errorMessage");
+function verifySubmission(report) {
 
-  element.textContent = message;
+  checkDuplicate(
+    report.publisherName,
+    report.month,
+    function(result) {
 
-  element.style.display = "block";
+      if (
+        result &&
+        result.success &&
+        result.exists
+      ) {
+
+        showMessage(
+          "Report submitted successfully!\n\n" +
+          "Publisher: " +
+          report.publisherName +
+          "\nMonth: " +
+          report.month +
+          "\nFSG: " +
+          (report.fsg || "Unassigned") +
+          "\n\nThank you for submitting your monthly report.",
+          "success"
+        );
+
+        form.reset();
+
+        setCurrentMonth();
+
+        fsgDisplay.textContent =
+          "Select your name first";
+
+        updateHoursRequirement();
+
+      } else {
+
+        showMessage(
+          "We could not confirm that your report was saved. Please check your submission in a moment or contact your group overseer.",
+          "error"
+        );
+
+      }
+
+      resetSubmitButton();
+
+    }
+  );
 
 }
 
-function hideMessages() {
+// ==========================================
+// RESET BUTTON
+// ==========================================
 
-  document.getElementById("successMessage").style.display = "none";
+function resetSubmitButton() {
 
-  document.getElementById("errorMessage").style.display = "none";
+  submitting = false;
 
-  document.getElementById("infoMessage").style.display = "none";
+  submitButton.disabled =
+    false;
+
+  submitButton.textContent =
+    "Submit Report";
 
 }
 
-// ========================================
-// INITIALIZATION
-// ========================================
+// ==========================================
+// INITIALIZE
+// ==========================================
+
+updateHoursRequirement();
 
 loadPublishers();
 
