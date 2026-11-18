@@ -6,104 +6,110 @@
 <title>Publishers Report</title>
 
 <style>
-  * {
-    box-sizing: border-box;
-  }
+* { box-sizing: border-box; }
 
-  body {
-    font-family: Arial, sans-serif;
-    background: #f2f5f8;
-    margin: 0;
-    padding: 20px;
-    color: #263445;
-  }
+body {
+  font-family: Arial, sans-serif;
+  background: #f2f5f8;
+  margin: 0;
+  padding: 20px;
+  color: #263445;
+}
 
-  .container {
-    max-width: 480px;
-    margin: 30px auto;
-    background: white;
-    padding: 28px;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-  }
+.container {
+  max-width: 480px;
+  margin: 25px auto;
+  background: white;
+  padding: 28px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,.08);
+}
 
-  h1 {
-    text-align: center;
-    color: #234d78;
-    margin-bottom: 8px;
-    font-size: 25px;
-  }
+h1 {
+  text-align: center;
+  color: #234d78;
+  margin-bottom: 8px;
+}
 
-  .subtitle {
-    text-align: center;
-    color: #777;
-    margin-bottom: 28px;
-    font-size: 14px;
-  }
+.subtitle {
+  text-align: center;
+  color: #777;
+  margin-bottom: 25px;
+  font-size: 14px;
+}
 
-  label {
-    display: block;
-    font-weight: bold;
-    margin-top: 18px;
-    margin-bottom: 8px;
-  }
+label {
+  display: block;
+  font-weight: bold;
+  margin-top: 18px;
+  margin-bottom: 8px;
+}
 
-  input, select, textarea {
-    width: 100%;
-    padding: 13px;
-    border: 1px solid #d0d7de;
-    border-radius: 8px;
-    font-size: 16px;
-    background: white;
-  }
+input, select, textarea {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #d0d7de;
+  border-radius: 8px;
+  font-size: 16px;
+  background: white;
+}
 
-  textarea {
-    resize: vertical;
-    min-height: 90px;
-  }
+input[readonly] {
+  background: #f5f7f9;
+}
 
-  button {
-    width: 100%;
-    margin-top: 25px;
-    padding: 15px;
-    background: #234d78;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-  }
+textarea {
+  resize: vertical;
+  min-height: 90px;
+}
 
-  button:disabled {
-    background: #8799aa;
-    cursor: wait;
-  }
+button {
+  width: 100%;
+  margin-top: 25px;
+  padding: 15px;
+  background: #234d78;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
 
-  .message {
-    display: none;
-    margin-top: 20px;
-    padding: 15px;
-    border-radius: 8px;
-    text-align: center;
-  }
+button:disabled {
+  background: #8799aa;
+}
 
-  .success {
-    background: #e8f5e9;
-    color: #216e39;
-  }
+.message {
+  display: none;
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+}
 
-  .error {
-    background: #ffebee;
-    color: #b71c1c;
-  }
+.success {
+  background: #e8f5e9;
+  color: #216e39;
+}
 
-  .footer {
-    text-align: center;
-    margin-top: 20px;
-    color: #999;
-    font-size: 12px;
-  }
+.error {
+  background: #ffebee;
+  color: #b71c1c;
+}
+
+.info {
+  background: #e3f2fd;
+  color: #154c79;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 20px;
+  color: #999;
+  font-size: 12px;
+}
+
 </style>
 </head>
 
@@ -111,116 +117,272 @@
 
 <div class="container">
 
-  <h1>Publishers Report</h1>
+<h1>Publishers Report</h1>
 
-  <div class="subtitle">
-    Monthly Field Service Report
-  </div>
+<div class="subtitle">
+Monthly Field Service Report
+</div>
 
-  <form id="reportForm">
+<form id="reportForm">
 
-    <label for="name">Publisher's Name</label>
-    <input
-      type="text"
-      id="name"
-      name="name"
-      placeholder="Enter your name"
-      required
-    >
+<label for="name">Publisher's Name</label>
 
-    <label for="month">Reporting Month</label>
-    <input
-      type="month"
-      id="month"
-      name="month"
-      required
-    >
+<select id="name" required>
+<option value="">Loading publishers...</option>
+</select>
 
-    <label for="type">Type of Publisher</label>
-    <select id="type" name="type" required>
-      <option value="">Select publisher type</option>
-      <option value="Publisher">Publisher</option>
-      <option value="Auxiliary Pioneer">Auxiliary Pioneer</option>
-      <option value="Regular Pioneer">Regular Pioneer</option>
-    </select>
+<label for="type">Type of Publisher</label>
 
-    <label for="hours">Hours</label>
-    <input
-      type="number"
-      id="hours"
-      name="hours"
-      min="0"
-      step="0.5"
-      placeholder="Enter hours"
-      required
-    >
+<input type="text" id="type" readonly>
 
-    <label for="studies">Bible Studies</label>
-    <input
-      type="number"
-      id="studies"
-      name="studies"
-      min="0"
-      step="1"
-      placeholder="Number of Bible studies"
-      required
-    >
+<label for="group">Field Service Group</label>
 
-    <label for="remarks">Remarks (Optional)</label>
-    <textarea
-      id="remarks"
-      name="remarks"
-      placeholder="Additional information"
-    ></textarea>
+<input type="text" id="group" readonly>
 
-    <button type="submit" id="submitButton">
-      SUBMIT REPORT
-    </button>
+<label for="month">Reporting Month</label>
 
-  </form>
+<input type="month" id="month" required>
 
-  <div id="successMessage" class="message success">
-    Your report has been submitted. Thank you!
-  </div>
+<label for="hours">Hours</label>
 
-  <div id="errorMessage" class="message error">
-    Something went wrong. Please try again.
-  </div>
+<input
+  type="number"
+  id="hours"
+  min="0"
+  step="0.5"
+  placeholder="Enter hours"
+  required
+>
 
-  <div class="footer">
-    Monthly Field Service Report
-  </div>
+<label for="studies">Bible Studies</label>
+
+<input
+  type="number"
+  id="studies"
+  min="0"
+  step="1"
+  placeholder="Number of Bible studies"
+  required
+>
+
+<label for="remarks">Remarks (Optional)</label>
+
+<textarea
+  id="remarks"
+  placeholder="Additional information"
+></textarea>
+
+<button type="submit" id="submitButton">
+SUBMIT REPORT
+</button>
+
+</form>
+
+<div id="successMessage" class="message success"></div>
+<div id="errorMessage" class="message error"></div>
+<div id="infoMessage" class="message info"></div>
+
+<div class="footer">
+Monthly Field Service Report
+</div>
 
 </div>
 
 <script>
 
+// IMPORTANT: Replace with your actual Apps Script Web App URL
 const scriptURL = "https://script.google.com/macros/s/AKfycbxiuyI0MiiUR_PYyt4grh3-bTyFQOAeHA3VBBfYLTwjr_2BVlZhXtNBvF9_aFAUeq_z/exec";
 
 const form = document.getElementById("reportForm");
+const nameSelect = document.getElementById("name");
+const typeInput = document.getElementById("type");
+const groupInput = document.getElementById("group");
+const monthInput = document.getElementById("month");
 const submitButton = document.getElementById("submitButton");
 
+let publishers = [];
+
+// Default reporting month
+const now = new Date();
+
+monthInput.value =
+  now.getFullYear() + "-" +
+  String(now.getMonth() + 1).padStart(2, "0");
+
+// JSONP function for Google Apps Script GET requests
+function jsonp(params) {
+
+  return new Promise((resolve, reject) => {
+
+    const callbackName =
+      "jsonp_" + Date.now() + "_" +
+      Math.floor(Math.random() * 100000);
+
+    const script = document.createElement("script");
+
+    const query = new URLSearchParams({
+      ...params,
+      callback: callbackName
+    });
+
+    script.src = scriptURL + "?" + query.toString();
+
+    window[callbackName] = function(data) {
+      resolve(data);
+      script.remove();
+      delete window[callbackName];
+    };
+
+    script.onerror = function() {
+      reject(new Error("Unable to connect to report system."));
+      script.remove();
+      delete window[callbackName];
+    };
+
+    document.body.appendChild(script);
+
+    setTimeout(() => {
+      if (window[callbackName]) {
+        delete window[callbackName];
+        script.remove();
+        reject(new Error("Connection timed out."));
+      }
+    }, 15000);
+
+  });
+
+}
+
+// Load publisher database
+async function loadPublishers() {
+
+  try {
+
+    const result = await jsonp({
+      action: "publishers"
+    });
+
+    if (!result.success) {
+      throw new Error("Unable to load publishers.");
+    }
+
+    publishers = result.publishers;
+
+    nameSelect.innerHTML =
+      '<option value="">Select your name</option>';
+
+    publishers.forEach(publisher => {
+
+      const option = document.createElement("option");
+
+      option.value = publisher.name;
+
+      option.textContent =
+        publisher.name + " — " + publisher.group;
+
+      nameSelect.appendChild(option);
+
+    });
+
+  } catch (error) {
+
+    nameSelect.innerHTML =
+      '<option value="">Unable to load publisher list</option>';
+
+    showError(
+      "Unable to load publisher list. Please refresh the page."
+    );
+
+  }
+
+}
+
+// Display publisher information
+nameSelect.addEventListener("change", function() {
+
+  const publisher = publishers.find(
+    p => p.name === nameSelect.value
+  );
+
+  if (publisher) {
+
+    typeInput.value = publisher.type;
+    groupInput.value = publisher.group;
+
+  } else {
+
+    typeInput.value = "";
+    groupInput.value = "";
+
+  }
+
+});
+
+// Check duplicate before submission
+async function checkReport(name, month) {
+
+  return await jsonp({
+    action: "check",
+    name: name,
+    month: month
+  });
+
+}
+
+// Submit report
 form.addEventListener("submit", async function(event) {
 
   event.preventDefault();
 
+  hideMessages();
+
+  const name = nameSelect.value;
+  const month = monthInput.value;
+  const hours = document.getElementById("hours").value;
+  const studies = document.getElementById("studies").value;
+  const remarks = document.getElementById("remarks").value;
+
+  if (!name || !month) {
+    showError("Please complete all required fields.");
+    return;
+  }
+
   submitButton.disabled = true;
-  submitButton.textContent = "Submitting...";
-
-  document.getElementById("successMessage").style.display = "none";
-  document.getElementById("errorMessage").style.display = "none";
-
-  const data = {
-    name: document.getElementById("name").value.trim(),
-    month: document.getElementById("month").value,
-    type: document.getElementById("type").value,
-    hours: document.getElementById("hours").value,
-    studies: document.getElementById("studies").value,
-    remarks: document.getElementById("remarks").value.trim()
-  };
+  submitButton.textContent = "Checking report...";
 
   try {
 
+    // Check if report already exists
+    const check = await checkReport(name, month);
+
+    if (check.duplicate) {
+
+      showError(
+        "A report for this month has already been submitted. " +
+        "Please contact your report administrator if you need to make a correction."
+      );
+
+      submitButton.disabled = false;
+      submitButton.textContent = "SUBMIT REPORT";
+      return;
+
+    }
+
+    if (!check.success) {
+      throw new Error(check.message || "Unable to verify report.");
+    }
+
+    submitButton.textContent = "Submitting...";
+
+    const data = {
+      name: name,
+      month: month,
+      hours: hours,
+      studies: studies,
+      remarks: remarks
+    };
+
+    // Send report to Google Apps Script
     await fetch(scriptURL, {
       method: "POST",
       mode: "no-cors",
@@ -230,13 +392,24 @@ form.addEventListener("submit", async function(event) {
       body: JSON.stringify(data)
     });
 
-    document.getElementById("successMessage").style.display = "block";
+    showSuccess(
+      "Your report has been sent. Thank you!"
+    );
 
     form.reset();
 
+    monthInput.value =
+      now.getFullYear() + "-" +
+      String(now.getMonth() + 1).padStart(2, "0");
+
+    typeInput.value = "";
+    groupInput.value = "";
+
   } catch (error) {
 
-    document.getElementById("errorMessage").style.display = "block";
+    showError(
+      "Unable to submit your report. Please try again or contact your report administrator."
+    );
 
   }
 
@@ -244,6 +417,35 @@ form.addEventListener("submit", async function(event) {
   submitButton.textContent = "SUBMIT REPORT";
 
 });
+
+function showSuccess(message) {
+
+  const element = document.getElementById("successMessage");
+
+  element.textContent = message;
+  element.style.display = "block";
+
+}
+
+function showError(message) {
+
+  const element = document.getElementById("errorMessage");
+
+  element.textContent = message;
+  element.style.display = "block";
+
+}
+
+function hideMessages() {
+
+  document.getElementById("successMessage").style.display = "none";
+  document.getElementById("errorMessage").style.display = "none";
+  document.getElementById("infoMessage").style.display = "none";
+
+}
+
+// Load publishers when website opens
+loadPublishers();
 
 </script>
 
